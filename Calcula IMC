@@ -1,0 +1,65 @@
+import tkinter as tk
+from tkinter import END, messagebox
+
+root = tk.Tk()
+root.config(width=350, height=230)
+root.title('Calculadora de IMC')
+
+lbNombre = tk.Label(root, text='Nombre paciente:')
+lbNombre.place(x=10, y=20)
+txNombre = tk.Entry(root, width=20)
+txNombre.place(x=115, y=20)
+
+lsEdad = tk.Label(root, text='Edad:')
+lsEdad.place(x=10, y=60)
+txEdad = tk.Entry(root, width=20)
+txEdad.place(x=115, y=60)
+
+lbPeso = tk.Label(root, text='Peso (kg):')
+lbPeso.place(x=10, y=100)
+txPeso = tk.Entry(root, width=20)
+txPeso.place(x=115, y=100)
+
+lbEstatura = tk.Label(root, text='Estatura (m):')
+lbEstatura.place(x=10, y=140)
+txEstatura = tk.Entry(root, width=20)
+txEstatura.place(x=115, y=140)
+
+def guardar_datos():
+    try:
+        nombre = txNombre.get()
+        edad = txEdad.get()
+        peso = txPeso.get()
+        estatura = txEstatura.get()
+        with open('datos_imc.txt', 'a') as archivo:
+            archivo.write(f'Hola {nombre},{edad},{peso},{estatura}\n')
+        txNombre.delete(0, END)
+        txEdad.delete(0, END)
+        txPeso.delete(0, END)
+        txEstatura.delete(0, END)
+        messagebox.showinfo('Datos guardados', 'Datos guardados correctamente.')
+    except Exception as e:
+        messagebox.showerror('Error', f'Error al guardar los datos: {e}')
+
+def ventana_imc():
+    ventana = tk.Toplevel(root)
+    ventana.title('Buscar Paciente')
+    ventana.geometry('350x250')
+    
+    lbBuscar = tk.Label(ventana, text='Nombre del paciente:')
+    lbBuscar.place(x=10, y=10)
+    txBuscar = tk.Entry(ventana, width=20)
+    txBuscar.place(x=130, y=10)
+
+    
+    lblResultado = tk.Label(ventana, text='')
+    lblResultado.place(x=10, y=120)
+
+
+btGuardarDatos = tk.Button(root, text='Guardar Datos', command=guardar_datos)
+btGuardarDatos.place(x=10, y=180)
+
+btCalcularIMC = tk.Button(root, text='Buscar Paciente', command=ventana_imc)
+btCalcularIMC.place(x=150, y=180)
+
+root.mainloop()
