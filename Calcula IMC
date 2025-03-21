@@ -50,7 +50,39 @@ def ventana_imc():
     lbBuscar.place(x=10, y=10)
     txBuscar = tk.Entry(ventana, width=20)
     txBuscar.place(x=130, y=10)
-
+    
+    def buscar_paciente():
+        nombre_buscar = txBuscar.get()
+        try:
+            with open('datos_imc.txt', 'r') as archivo:
+                for linea in archivo:
+                    nombre, edad, peso, estatura = linea.strip().split(',')
+                    if nombre.lower() == nombre_buscar.lower():
+                        peso = float(peso)
+                        estatura = float(estatura)
+                        imc = peso / (estatura ** 2)
+                        
+                        if imc < 18.5:
+                            categoria = 'Bajo peso'
+                        elif 18.5 <= imc < 24.9:
+                            categoria = 'Peso normal'
+                        elif 25 <= imc < 29.9:
+                            categoria = 'Sobrepeso'
+                        elif 30 <= imc < 34.9:
+                            categoria = 'Obesidad I'
+                        elif 35 <= imc < 39.9:
+                            categoria = 'Obesidad II'
+                        else:
+                            categoria = 'Obesidad III'
+                        
+                        lblResultado.config(text=f"Nombre: {nombre}\nEdad: {edad}\nIMC: {imc:.2f}\nCategoría: {categoria}")
+                        return
+            lblResultado.config(text='Paciente no encontrado')
+        except FileNotFoundError:
+            messagebox.showerror('Error', 'No hay datos registrados aún.')
+    
+    btBuscar = tk.Button(ventana, text='Buscar', command=buscar_paciente)
+    btBuscar.place(x=150, y=50)
     
     lblResultado = tk.Label(ventana, text='')
     lblResultado.place(x=10, y=120)
